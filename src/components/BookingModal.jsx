@@ -2,7 +2,9 @@ import React, { useMemo, useState } from "react";
 import { saveBooking } from "../utils/storage";
 
 export default function BookingModal({ center, onClose }) {
-  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [selectedDate, setSelectedDate] = useState(() =>
+    new Date().toISOString().slice(0, 10)
+  );
   const [selectedSlot, setSelectedSlot] = useState("");
   const [note, setNote] = useState("");
 
@@ -20,7 +22,7 @@ export default function BookingModal({ center, onClose }) {
   const timeSlots = {
     Morning: ["09:00 AM", "09:30 AM", "10:00 AM"],
     Afternoon: ["12:00 PM", "12:30 PM", "01:00 PM"],
-    Evening: ["04:00 PM", "04:30 PM", "05:00 PM"]
+    Evening: ["04:00 PM", "04:30 PM", "05:00 PM"],
   };
 
   const handleBook = () => {
@@ -30,13 +32,13 @@ export default function BookingModal({ center, onClose }) {
     }
     const booking = {
       id: Date.now() + "-" + Math.random().toString(36).slice(2, 7),
-      centerName: center.name || center["Hospital Name"],
-      address: center.address || center.Address,
-      city: center.city || center.City,
-      state: center.state || center.State,
+      centerName: center.name,
+      address: center.address,
+      city: center.city,
+      state: center.state,
       date: selectedDate,
       time: selectedSlot,
-      note
+      note,
     };
     saveBooking(booking);
     alert("Booking saved to My Bookings");
@@ -48,65 +50,83 @@ export default function BookingModal({ center, onClose }) {
       <div className="bg-white w-full max-w-2xl rounded-lg p-6">
         <div className="flex justify-between items-start">
           <div>
-            <h2 className="text-xl font-semibold">Book at {center.name || center["Hospital Name"]}</h2>
-            <p className="text-sm text-slate-500">{center.address || center.Address}</p>
+            <h2 className="text-xl font-semibold">
+              Book at {center.name}
+            </h2>
+            <p className="text-sm text-slate-500">{center.address}</p>
           </div>
-          <button onClick={onClose} className="text-slate-500">Close</button>
+          <button onClick={onClose} className="text-slate-500">
+            Close
+          </button>
         </div>
 
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm mb-2">Select Date (within 7 days)</label>
-            <select value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} className="w-full border rounded px-3 py-2">
-              {dateOptions.map((d) => <option key={d.iso} value={d.iso}>{d.label}</option>)}
+            <select
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="w-full border rounded px-3 py-2"
+            >
+              {dateOptions.map((d) => (
+                <option key={d.iso} value={d.iso}>
+                  {d.label}
+                </option>
+              ))}
             </select>
           </div>
 
           <div>
             <label className="block text-sm mb-2">Time Slot</label>
 
-            <p className="font-medium">Today</p>
-
-            <p className="mt-2">Morning</p>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {timeSlots.Morning.map((t) => (
-                <label key={t} className={`border px-3 py-1 rounded cursor-pointer ${selectedSlot === t ? "bg-sky-600 text-white" : ""}`}>
-                  <input type="radio" name="slot" value={t} checked={selectedSlot === t} onChange={(e) => setSelectedSlot(e.target.value)} className="hidden" />
-                  <span>{t}</span>
-                </label>
-              ))}
-            </div>
-
-            <p className="mt-3">Afternoon</p>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {timeSlots.Afternoon.map((t) => (
-                <label key={t} className={`border px-3 py-1 rounded cursor-pointer ${selectedSlot === t ? "bg-sky-600 text-white" : ""}`}>
-                  <input type="radio" name="slot" value={t} checked={selectedSlot === t} onChange={(e) => setSelectedSlot(e.target.value)} className="hidden" />
-                  <span>{t}</span>
-                </label>
-              ))}
-            </div>
-
-            <p className="mt-3">Evening</p>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {timeSlots.Evening.map((t) => (
-                <label key={t} className={`border px-3 py-1 rounded cursor-pointer ${selectedSlot === t ? "bg-sky-600 text-white" : ""}`}>
-                  <input type="radio" name="slot" value={t} checked={selectedSlot === t} onChange={(e) => setSelectedSlot(e.target.value)} className="hidden" />
-                  <span>{t}</span>
-                </label>
-              ))}
-            </div>
+            {["Morning", "Afternoon", "Evening"].map((period) => (
+              <div key={period}>
+                <p className="mt-2 font-medium">{period}</p>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {timeSlots[period].map((t) => (
+                    <label
+                      key={t}
+                      className={`border px-3 py-1 rounded cursor-pointer ${
+                        selectedSlot === t ? "bg-sky-600 text-white" : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="slot"
+                        value={t}
+                        checked={selectedSlot === t}
+                        onChange={(e) => setSelectedSlot(e.target.value)}
+                        className="hidden"
+                      />
+                      <span>{t}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="mt-4">
           <label className="block text-sm mb-2">Note (optional)</label>
-          <textarea value={note} onChange={(e) => setNote(e.target.value)} className="w-full border rounded px-3 py-2" rows="3" />
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            className="w-full border rounded px-3 py-2"
+            rows="3"
+          />
         </div>
 
         <div className="mt-4 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 border rounded">Cancel</button>
-          <button onClick={handleBook} className="px-4 py-2 bg-sky-600 text-white rounded">Book FREE Center Visit</button>
+          <button onClick={onClose} className="px-4 py-2 border rounded">
+            Cancel
+          </button>
+          <button
+            onClick={handleBook}
+            className="px-4 py-2 bg-sky-600 text-white rounded"
+          >
+            Book FREE Center Visit
+          </button>
         </div>
       </div>
     </div>

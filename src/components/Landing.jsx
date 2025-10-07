@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Search,
-  Stethoscope,
-  FlaskConical,
-  Hospital,
-  Pill,
-  Ambulance,
-} from "lucide-react";
-import Hero from '../assets/hero_image.png'
+import { Search, Stethoscope, FlaskConical, Hospital, Pill, Ambulance } from "lucide-react";
+import Hero from "../assets/hero_image.png";
 
 export default function Landing() {
   const [states, setStates] = useState([]);
@@ -41,15 +34,14 @@ export default function Landing() {
   return (
     <div className="bg-gradient-to-r from-blue-100 to-blue-50 w-full py-4">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 grid md:grid-cols-2 gap-8 items-center">
-        {/* Left Section */}
         <div className="space-y-6">
           <h1 className="text-4xl md:text-4xl font-semibold leading-tight">
-            Skip the travel! Find Online{" "}<br/>
-            <span className="text-6xl font-bold">Medical</span> <span className="text-blue-600 text-6xl font-bold">Centers</span>
+            Skip the travel! Find Online <br />
+            <span className="text-6xl font-bold">Medical</span>{" "}
+            <span className="text-blue-600 text-6xl font-bold">Centers</span>
           </h1>
           <p className="text-gray-600">
-            Connect instantly with a 24x7 specialist or choose to video visit a
-            particular doctor.
+            Connect instantly with a 24x7 specialist or choose to video visit a particular doctor.
           </p>
           <button
             onClick={handleSearch}
@@ -58,8 +50,6 @@ export default function Landing() {
             Find Centers
           </button>
         </div>
-
-        {/* Right Section */}
         <div className="flex justify-center">
           <img src={Hero} alt="Doctors" className="w-96 md:w-[600px]" />
         </div>
@@ -133,7 +123,7 @@ function CategoryCard({ icon, label, active }) {
         active ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:bg-gray-50"
       } transition`}
     >
-      <div className={`text-blue-600 mb-2`}>{icon}</div>
+      <div className="text-blue-600 mb-2">{icon}</div>
       <p className="text-sm font-medium text-gray-700">{label}</p>
     </div>
   );

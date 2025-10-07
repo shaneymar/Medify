@@ -1,9 +1,18 @@
-// Utility to handle localStorage for bookings
-export const saveBooking = (booking) => {
-  const existing = JSON.parse(localStorage.getItem("bookings")) || [];
-  localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
-};
+// utils/storage.js
+
+const STORAGE_KEY = "bookings";
 
 export const getBookings = () => {
-  return JSON.parse(localStorage.getItem("bookings")) || [];
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+};
+
+export const saveBooking = (booking) => {
+  const current = getBookings();
+  current.push(booking);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
 };
