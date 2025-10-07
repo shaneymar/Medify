@@ -61,73 +61,67 @@ export default function Landing() {
 
         {/* Right Section */}
         <div className="flex justify-center">
-          <img
-            src={Hero}
-            alt="Doctors"
-            className="w-96 md:w-[600px]"
-          />
+          <img src={Hero} alt="Doctors" className="w-96 md:w-[600px]" />
         </div>
       </div>
 
       {/* Search Section */}
       <div className="bg-white rounded-2xl max-w-6xl items-center mx-auto p-4 mt-[-150px]">
-      <form
-        onSubmit={handleSearch}
-        className="max-w-4xl mx-auto mt-10 p-6 flex flex-col md:flex-row items-center gap-4 justify-between"
-      >
-        <div id="state" className="flex items-center border rounded-md px-3 w-full md:w-1/3">
-          <Search className="text-gray-400 w-4 h-4 mr-2" />
-          <select
-            value={selectedState}
-            onChange={(e) => setSelectedState(e.target.value)}
-            className="outline-none w-full text-sm text-gray-700 p-2"
-            required
-          >
-            <option value="">Select State</option>
-            {states.map((state) => (
-              <option key={state}>{state}</option>
-            ))}
-          </select>
-        </div>
-
-        <div id="city" className="flex items-center border rounded-md px-3 w-full md:w-1/3">
-          <Search className="text-gray-400 w-4 h-4 mr-2" />
-          <select
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-            className="outline-none w-full text-sm text-gray-700 p-2"
-            required
-          >
-            <option value="">Select City</option>
-            {cities.map((city) => (
-              <option key={city}>{city}</option>
-            ))}
-          </select>
-        </div>
-
-        <button
-          id="searchBtn"
-          type="submit"
-          className="bg-blue-600 text-white px-6 py-2 rounded-md cursor-pointer hover:bg-blue-700"
+        <form
+          onSubmit={handleSearch}
+          className="max-w-4xl mx-auto mt-10 p-6 flex flex-col md:flex-row items-center gap-4 justify-between"
         >
-          Search
-        </button>
+          <div id="state" className="flex items-center border rounded-md px-3 w-full md:w-1/3">
+            <Search className="text-gray-400 w-4 h-4 mr-2" />
+            <select
+              value={selectedState}
+              onChange={(e) => setSelectedState(e.target.value)}
+              className="outline-none w-full text-sm text-gray-700 p-2"
+              required
+            >
+              <option value="">Select State</option>
+              {states.map((state) => (
+                <option key={state}>{state}</option>
+              ))}
+            </select>
+          </div>
 
-        
-      </form>
-              {/* Categories Section */}
-      <div className="max-w-5xl mx-auto mt-10 text-center">
-        <h3 className="text-gray-700 mb-4 font-medium">You may be looking for</h3>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <CategoryCard icon={<Stethoscope />} label="Doctors" />
-          <CategoryCard icon={<FlaskConical />} label="Labs" />
-          <CategoryCard icon={<Hospital />} label="Hospitals" active />
-          <CategoryCard icon={<Pill />} label="Medical Store" />
-          <CategoryCard icon={<Ambulance />} label="Ambulance" />
+          <div id="city" className="flex items-center border rounded-md px-3 w-full md:w-1/3">
+            <Search className="text-gray-400 w-4 h-4 mr-2" />
+            <select
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+              className="outline-none w-full text-sm text-gray-700 p-2"
+              required
+            >
+              <option value="">Select City</option>
+              {cities.map((city) => (
+                <option key={city}>{city}</option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            id="searchBtn"
+            type="submit"
+            className="bg-blue-600 text-white px-6 py-2 rounded-md cursor-pointer hover:bg-blue-700"
+          >
+            Search
+          </button>
+        </form>
+
+        {/* Categories Section */}
+        <div className="max-w-5xl mx-auto mt-10 text-center">
+          <h3 className="text-gray-700 mb-4 font-medium">You may be looking for</h3>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <CategoryCard icon={<Stethoscope />} label="Doctors" />
+            <CategoryCard icon={<FlaskConical />} label="Labs" />
+            <CategoryCard icon={<Hospital />} label="Hospitals" active />
+            <CategoryCard icon={<Pill />} label="Medical Store" />
+            <CategoryCard icon={<Ambulance />} label="Ambulance" />
+          </div>
         </div>
       </div>
-    
-    </div>
     </div>
   );
 }

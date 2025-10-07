@@ -1,19 +1,9 @@
-// localStorage helpers — uses key 'bookings'
-const KEY = "bookings";
+// Utility to handle localStorage for bookings
+export const saveBooking = (booking) => {
+  const existing = JSON.parse(localStorage.getItem("bookings")) || [];
+  localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
+};
 
 export const getBookings = () => {
-  try {
-    return JSON.parse(localStorage.getItem(KEY)) || [];
-  } catch {
-    return [];
-  }
-};
-
-export const saveBooking = (booking) => {
-  const existing = getBookings();
-  localStorage.setItem(KEY, JSON.stringify([booking, ...existing]));
-};
-
-export const saveBookings = (bookings) => {
-  localStorage.setItem(KEY, JSON.stringify(bookings));
+  return JSON.parse(localStorage.getItem("bookings")) || [];
 };

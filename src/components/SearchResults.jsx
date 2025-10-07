@@ -18,7 +18,6 @@ export default function SearchResults() {
     fetch(`https://meddata-backend.onrender.com/data?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`)
       .then((r) => r.json())
       .then((data) => {
-        // Map result ensuring fields exist
         const mapped = (Array.isArray(data) ? data : []).map((item, idx) => ({
           id: idx,
           name: item["Hospital Name"] || item.name || "Unknown Hospital",

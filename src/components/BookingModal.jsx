@@ -2,12 +2,10 @@ import React, { useMemo, useState } from "react";
 import { saveBooking } from "../utils/storage";
 
 export default function BookingModal({ center, onClose }) {
-  // default to today
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [selectedSlot, setSelectedSlot] = useState("");
   const [note, setNote] = useState("");
 
-  // generate next 7 days
   const dateOptions = useMemo(() => {
     const arr = [];
     const today = new Date();
@@ -40,7 +38,6 @@ export default function BookingModal({ center, onClose }) {
       time: selectedSlot,
       note
     };
-    // save to localStorage key 'bookings'
     saveBooking(booking);
     alert("Booking saved to My Bookings");
     onClose();
