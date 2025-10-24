@@ -1,4 +1,3 @@
-// src/components/MyBookings.js
 import React, { useEffect, useState } from "react";
 import { getBookings } from "../utils/storage";
 
@@ -6,7 +5,6 @@ export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    // Test Case 5 & 6: Fetching persisted data on mount
     setBookings(getBookings());
   }, []);
 
@@ -18,7 +16,7 @@ export default function MyBookings() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {bookings.map((b) => (
-            // Ensure unique key is used (b.id) for stable rendering
+          
             <div key={b.id} data-testid={`booking-item-${b.id}`} className="bg-white p-4 rounded shadow">
               <h3>{b.centerName}</h3>
               <p>{b.address}</p>

@@ -55,7 +55,7 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* Search Section */}
+    
       <div className="bg-white rounded-2xl max-w-6xl items-center mx-auto p-4 mt-[-150px]">
         <form
           onSubmit={handleSearch}
@@ -100,7 +100,7 @@ export default function Landing() {
           </button>
         </form>
 
-        {/* Categories Section */}
+        
         <div className="max-w-5xl mx-auto mt-10 text-center">
           <h3 className="text-gray-700 mb-4 font-medium">You may be looking for</h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">

@@ -1,4 +1,3 @@
-// src/components/BookingModal.js
 import React, { useMemo, useState } from "react";
 import { saveBooking } from "../utils/storage";
 
@@ -8,7 +7,6 @@ export default function BookingModal({ center, onClose }) {
   );
   const [selectedSlot, setSelectedSlot] = useState("");
   const [note, setNote] = useState("");
-  // message starts empty to avoid showing a status too early
   const [message, setMessage] = useState("");
 
   const dateOptions = useMemo(() => {
@@ -45,14 +43,12 @@ export default function BookingModal({ center, onClose }) {
       note,
     };
     
-    // Test Case 4: Saving the booking
+    
     try {
         saveBooking(booking);
         setMessage("Booking confirmed!"); 
-        // Delay closing to allow the test/user to see the success message
         setTimeout(onClose, 600); 
     } catch (e) {
-        // Handle potential storage errors (e.g., Quota exceeded)
         setMessage("Error: Could not save booking. Storage limit reached?");
         console.error("Booking save error:", e);
     }
@@ -102,7 +98,6 @@ export default function BookingModal({ center, onClose }) {
                   {timeSlots[period].map((t) => (
                     <label
                       key={t}
-                      // Corrected data-testid format for easier Cypress selection
                       data-testid={`slot-${t.replace(':', '-').replace(' ', '-')}`} 
                       className={`border px-3 py-1 rounded cursor-pointer ${
                         selectedSlot === t ? "bg-sky-600 text-white" : ""
@@ -136,7 +131,6 @@ export default function BookingModal({ center, onClose }) {
           />
         </div>
 
-        {/* Conditional styling based on message content */}
         {message && (
             <p className={`text-sm mt-2 ${message.includes('confirmed') ? 'text-green-600' : 'text-red-500'}`} 
                data-testid="booking-message">
