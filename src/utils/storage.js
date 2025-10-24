@@ -1,18 +1,16 @@
 // utils/storage.js
-
 const STORAGE_KEY = "bookings";
 
-export const getBookings = () => {
+export function getBookings() {
   try {
-    const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
   } catch {
     return [];
   }
-};
+}
 
-export const saveBooking = (booking) => {
-  const current = getBookings();
-  current.push(booking);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
-};
+export function saveBooking(booking) {
+  const existing = getBookings();
+  const updated = [...existing, booking];
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+}

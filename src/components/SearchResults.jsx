@@ -59,6 +59,7 @@ export default function SearchResults() {
 
             <div className="mt-4 flex gap-3">
               <button
+                 data-testid={`book-btn-${c.id}`}
                 onClick={() => setSelected(c)}
                 className="bg-sky-600 text-white px-4 py-2 rounded"
               >

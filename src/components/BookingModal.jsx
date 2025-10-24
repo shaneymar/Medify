@@ -7,6 +7,7 @@ export default function BookingModal({ center, onClose }) {
   );
   const [selectedSlot, setSelectedSlot] = useState("");
   const [note, setNote] = useState("");
+  const [message, setMessage] = useState(""); // ✅ Test-friendly status message
 
   const dateOptions = useMemo(() => {
     const arr = [];
@@ -27,9 +28,10 @@ export default function BookingModal({ center, onClose }) {
 
   const handleBook = () => {
     if (!selectedSlot || !selectedDate) {
-      alert("Select date and time slot");
+      setMessage("Please select date and slot"); // ✅ replaces alert()
       return;
     }
+
     const booking = {
       id: Date.now() + "-" + Math.random().toString(36).slice(2, 7),
       centerName: center.name,
@@ -40,13 +42,17 @@ export default function BookingModal({ center, onClose }) {
       time: selectedSlot,
       note,
     };
+
     saveBooking(booking);
-    alert("Booking saved to My Bookings");
-    onClose();
+    setMessage("Booking confirmed!"); // ✅ visible for tests
+    setTimeout(onClose, 600); // ✅ give UI time to verify before closing
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div
+      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+      data-testid="booking-modal"
+    >
       <div className="bg-white w-full max-w-2xl rounded-lg p-6">
         <div className="flex justify-between items-start">
           <div>
@@ -55,15 +61,16 @@ export default function BookingModal({ center, onClose }) {
             </h2>
             <p className="text-sm text-slate-500">{center.address}</p>
           </div>
-          <button onClick={onClose} className="text-slate-500">
+          <button onClick={onClose} className="text-slate-500" data-testid="close-modal">
             Close
           </button>
         </div>
 
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm mb-2">Select Date (within 7 days)</label>
+            <label className="block text-sm mb-2">Select Date</label>
             <select
+              data-testid="date-select"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
               className="w-full border rounded px-3 py-2"
@@ -78,7 +85,6 @@ export default function BookingModal({ center, onClose }) {
 
           <div>
             <label className="block text-sm mb-2">Time Slot</label>
-
             {["Morning", "Afternoon", "Evening"].map((period) => (
               <div key={period}>
                 <p className="mt-2 font-medium">{period}</p>
@@ -86,6 +92,7 @@ export default function BookingModal({ center, onClose }) {
                   {timeSlots[period].map((t) => (
                     <label
                       key={t}
+                      data-testid={`slot-${t}`}
                       className={`border px-3 py-1 rounded cursor-pointer ${
                         selectedSlot === t ? "bg-sky-600 text-white" : ""
                       }`}
@@ -98,7 +105,7 @@ export default function BookingModal({ center, onClose }) {
                         onChange={(e) => setSelectedSlot(e.target.value)}
                         className="hidden"
                       />
-                      <span>{t}</span>
+                      {t}
                     </label>
                   ))}
                 </div>
@@ -108,14 +115,19 @@ export default function BookingModal({ center, onClose }) {
         </div>
 
         <div className="mt-4">
-          <label className="block text-sm mb-2">Note (optional)</label>
           <textarea
+            data-testid="note-input"
             value={note}
             onChange={(e) => setNote(e.target.value)}
+            placeholder="Add a note (optional)"
             className="w-full border rounded px-3 py-2"
             rows="3"
           />
         </div>
+
+        <p className="text-red-500 text-sm mt-2" data-testid="booking-message">
+          {message}
+        </p>
 
         <div className="mt-4 flex justify-end gap-3">
           <button onClick={onClose} className="px-4 py-2 border rounded">
@@ -123,6 +135,7 @@ export default function BookingModal({ center, onClose }) {
           </button>
           <button
             onClick={handleBook}
+            data-testid="confirm-booking"
             className="px-4 py-2 bg-sky-600 text-white rounded"
           >
             Book FREE Center Visit
