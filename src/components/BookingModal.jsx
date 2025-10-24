@@ -1,3 +1,4 @@
+// src/components/BookingModal.js
 import React, { useMemo, useState } from "react";
 import { saveBooking } from "../utils/storage";
 
@@ -7,7 +8,8 @@ export default function BookingModal({ center, onClose }) {
   );
   const [selectedSlot, setSelectedSlot] = useState("");
   const [note, setNote] = useState("");
-  const [message, setMessage] = useState(""); // ✅ Test-friendly status message
+  // message starts empty to avoid showing a status too early
+  const [message, setMessage] = useState("");
 
   const dateOptions = useMemo(() => {
     const arr = [];
@@ -28,7 +30,7 @@ export default function BookingModal({ center, onClose }) {
 
   const handleBook = () => {
     if (!selectedSlot || !selectedDate) {
-      setMessage("Please select date and slot"); // ✅ replaces alert()
+      setMessage("Please select date and slot");
       return;
     }
 
@@ -42,10 +44,18 @@ export default function BookingModal({ center, onClose }) {
       time: selectedSlot,
       note,
     };
-
-    saveBooking(booking);
-    setMessage("Booking confirmed!"); // ✅ visible for tests
-    setTimeout(onClose, 600); // ✅ give UI time to verify before closing
+    
+    // Test Case 4: Saving the booking
+    try {
+        saveBooking(booking);
+        setMessage("Booking confirmed!"); 
+        // Delay closing to allow the test/user to see the success message
+        setTimeout(onClose, 600); 
+    } catch (e) {
+        // Handle potential storage errors (e.g., Quota exceeded)
+        setMessage("Error: Could not save booking. Storage limit reached?");
+        console.error("Booking save error:", e);
+    }
   };
 
   return (
@@ -92,7 +102,8 @@ export default function BookingModal({ center, onClose }) {
                   {timeSlots[period].map((t) => (
                     <label
                       key={t}
-                      data-testid={`slot-${t}`}
+                      // Corrected data-testid format for easier Cypress selection
+                      data-testid={`slot-${t.replace(':', '-').replace(' ', '-')}`} 
                       className={`border px-3 py-1 rounded cursor-pointer ${
                         selectedSlot === t ? "bg-sky-600 text-white" : ""
                       }`}
@@ -125,9 +136,13 @@ export default function BookingModal({ center, onClose }) {
           />
         </div>
 
-        <p className="text-red-500 text-sm mt-2" data-testid="booking-message">
-          {message}
-        </p>
+        {/* Conditional styling based on message content */}
+        {message && (
+            <p className={`text-sm mt-2 ${message.includes('confirmed') ? 'text-green-600' : 'text-red-500'}`} 
+               data-testid="booking-message">
+                {message}
+            </p>
+        )}
 
         <div className="mt-4 flex justify-end gap-3">
           <button onClick={onClose} className="px-4 py-2 border rounded">
