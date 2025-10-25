@@ -39,7 +39,7 @@ export default function SearchResults() {
 
   return (
     <section>
-      <h1 className="text-2xl font-semibold mb-4">
+      <h1 className="text-2xl font-semibold mb-4 max-7xl py-5">
         {centers.length} medical centers available in {city.toLowerCase()}
       </h1>
 
