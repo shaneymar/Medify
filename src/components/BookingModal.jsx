@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import { saveBooking } from "../utils/storage";
 
-export default function BookingModal({ hospital, onClose }) {
-  const [selectedDate, setSelectedDate] = useState("");
+export default function BookingModal({ center, onClose }) {
+  const [selectedDate, setSelectedDate] = useState(() =>
+    new Date().toISOString().slice(0, 10)
+  );
+  const [selectedSlot, setSelectedSlot] = useState("");
   const [note, setNote] = useState("");
+  const [message, setMessage] = useState("");
 
-  const saveBooking = () => {
-    const booking = {
-      "Hospital Name": hospital["Hospital Name"],
-      City: hospital.City,
-      State: hospital.State,
-      Date: selectedDate,
-      Time: selectedTime,
-      Note: note,
-    };
-
-    // Save to localStorage
-    const existing = JSON.parse(localStorage.getItem("bookings")) || [];
-    localStorage.setItem("bookings", JSON.stringify([...existing, booking]));
-    onClose();
-  };
+  const dateOptions = useMemo(() => {
+    const arr = [];
+    const today = new Date();
+    for (let i = 0; i <= 7; i++) {
+      const d = new Date();
+      d.setDate(today.getDate() + i);
+      arr.push({ iso: d.toISOString().slice(0, 10), label: d.toDateString() });
+    }
+    return arr;
+  }, []);
 
   const timeSlots = {
     Morning: ["09:00 AM", "09:30 AM", "10:00 AM"],
@@ -26,89 +26,133 @@ export default function BookingModal({ hospital, onClose }) {
     Evening: ["04:00 PM", "04:30 PM", "05:00 PM"],
   };
 
-  const [selectedTime, setSelectedTime] = useState("");
+  const handleBook = () => {
+    if (!selectedSlot || !selectedDate) {
+      setMessage("Please select date and slot");
+      return;
+    }
+
+    const booking = {
+      id: Date.now() + "-" + Math.random().toString(36).slice(2, 7),
+      centerName: center.name,
+      address: center.address,
+      city: center.city,
+      state: center.state,
+      date: selectedDate,
+      time: selectedSlot,
+      note,
+    };
+
+    try {
+      saveBooking(booking);
+      setMessage("Booking confirmed!");
+      setTimeout(onClose, 600);
+    } catch (e) {
+      setMessage("Error: Could not save booking. Storage limit reached?");
+      console.error("Booking save error:", e);
+    }
+  };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black/50">
-      <div className="bg-white p-6 w-[600px] rounded-md">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold">
-            Book at {hospital["Hospital Name"].toUpperCase()}
-          </h2>
-          <button onClick={onClose} className="text-gray-500">Close</button>
+    <div
+      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+      data-testid="booking-modal"
+    >
+      <div className="bg-white w-full max-w-2xl rounded-lg p-6">
+        <div className="flex justify-between items-start">
+          <div>
+            <h2 className="text-xl font-semibold">Book at {center.name}</h2>
+            <p className="text-sm text-slate-500">{center.address}</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-slate-500"
+            data-testid="close-modal"
+          >
+            Close
+          </button>
         </div>
 
-        {/* ✅ Cypress expects this */}
-        <p>Today</p>
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm mb-2">Select Date</label>
+            <select
+              data-testid="date-select"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="w-full border rounded px-3 py-2"
+            >
+              {dateOptions.map((d) => (
+                <option key={d.iso} value={d.iso}>
+                  {d.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <label className="block text-sm font-medium my-2">Select Date</label>
-        <input
-          type="date"
-          className="border px-2 py-1 rounded w-full"
-          onChange={(e) => setSelectedDate(e.target.value)}
-        />
+          <div>
+            <label className="block text-sm mb-2">Time Slot</label>
+            {["Morning", "Afternoon", "Evening"].map((period) => (
+              <div key={period}>
+                <p className="mt-2 font-medium">{period}</p>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {timeSlots[period].map((t) => (
+                    <label
+                      key={t}
+                      data-testid={`slot-${t
+                        .replace(":", "-")
+                        .replace(" ", "-")}`}
+                      className={`border px-3 py-1 rounded cursor-pointer ${
+                        selectedSlot === t ? "bg-sky-600 text-white" : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="slot"
+                        value={t}
+                        checked={selectedSlot === t}
+                        onChange={(e) => setSelectedSlot(e.target.value)}
+                        className="hidden"
+                      />
+                      {t}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-        {/* ✅ Time Slots Sections */}
         <div className="mt-4">
-          <p>Morning</p>
-          <div className="flex gap-2">
-            {timeSlots.Morning.map((t) => (
-              <button
-                key={t}
-                onClick={() => setSelectedTime(t)}
-                className={`border px-3 py-1 rounded ${
-                  selectedTime === t ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-
-          <p className="mt-4">Afternoon</p>
-          <div className="flex gap-2">
-            {timeSlots.Afternoon.map((t) => (
-              <button
-                key={t}
-                onClick={() => setSelectedTime(t)}
-                className={`border px-3 py-1 rounded ${
-                  selectedTime === t ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-
-          <p className="mt-4">Evening</p>
-          <div className="flex gap-2">
-            {timeSlots.Evening.map((t) => (
-              <button
-                key={t}
-                onClick={() => setSelectedTime(t)}
-                className={`border px-3 py-1 rounded ${
-                  selectedTime === t ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
+          <textarea
+            data-testid="note-input"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Add a note (optional)"
+            className="w-full border rounded px-3 py-2"
+            rows="3"
+          />
         </div>
 
-        <textarea
-          className="border w-full mt-4 p-2 rounded"
-          placeholder="Add a note (optional)"
-          onChange={(e) => setNote(e.target.value)}
-        />
+        {message && (
+          <p
+            className={`text-sm mt-2 ${
+              message.includes("confirmed") ? "text-green-600" : "text-red-500"
+            }`}
+            data-testid="booking-message"
+          >
+            {message}
+          </p>
+        )}
 
-        <div className="flex justify-end mt-4">
-          <button onClick={onClose} className="mr-2 border px-3 py-2 rounded">
+        <div className="mt-4 flex justify-end gap-3">
+          <button onClick={onClose} className="px-4 py-2 border rounded">
             Cancel
           </button>
           <button
-            onClick={saveBooking}
-            className="bg-blue-600 text-white px-4 py-2 rounded"
+            onClick={handleBook}
+            data-testid="confirm-booking"
+            className="px-4 py-2 bg-sky-600 text-white rounded"
           >
             Book FREE Center Visit
           </button>
