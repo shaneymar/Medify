@@ -56,6 +56,7 @@ export default function SearchResults() {
             <p className="mt-2 text-sm">
               Rating: <span className="font-medium">{c.rating}</span>
             </p>
+            <p className="text-green-500 text-lg">Available Today</p>
 
             <div className="mt-4 flex gap-3">
               <button

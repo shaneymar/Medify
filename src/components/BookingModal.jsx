@@ -259,7 +259,7 @@ export default function BookingModal({ center, onClose, onBooking }) {
                 <p className="mt-2 font-medium">{period}</p>
                 <div className="flex flex-wrap gap-2 mt-1">
                   {timeSlots[period].map((t) => (
-                    <p
+                    <label
                       key={t}
                       data-testid={`slot-${t.replace(":", "-").replace(" ", "-")}`}
                       className={`border px-3 py-1 rounded cursor-pointer ${
@@ -275,7 +275,7 @@ export default function BookingModal({ center, onClose, onBooking }) {
                         className="hidden"
                       />
                       {t}
-                    </p>
+                    </label>
                   ))}
                 </div>
               </div>
