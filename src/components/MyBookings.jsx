@@ -1,34 +1,29 @@
+// MyBookings.js
 import React, { useEffect, useState } from "react";
-import { getBookings } from "../utils/storage";
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    setBookings(getBookings());
+    const saved = JSON.parse(localStorage.getItem("bookings")) || [];
+    setBookings(saved);
   }, []);
 
   return (
-    <section className="py-6">
+    <div className="max-w-4xl mx-auto mt-10">
       <h1 className="text-2xl font-semibold mb-4">My Bookings</h1>
       {bookings.length === 0 ? (
-        <p data-testid="no-bookings-message">No bookings yet.</p>
+        <p>No bookings found.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {bookings.map((b) => (
-          
-            <div key={b.id} data-testid={`booking-item-${b.id}`} className="bg-white p-4 rounded shadow">
-              <h3>{b.centerName}</h3>
-              <p>{b.address}</p>
-              <p>
-                {b.city}, {b.state}
-              </p>
-              <p>Date: {b.date}</p>
-              <p>Time: {b.time}</p>
-            </div>
-          ))}
-        </div>
+        bookings.map((b, idx) => (
+          <div key={idx} className="border p-4 rounded-lg mb-3">
+            <h3 className="font-bold">{b["Hospital Name"]}</h3>
+            <p>{b.City}, {b.State}</p>
+            <p>Date: {b.bookingDate}</p>
+            <p>Time: {b.bookingTime}</p>
+          </div>
+        ))
       )}
-    </section>
+    </div>
   );
 }
