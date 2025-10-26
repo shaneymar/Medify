@@ -48,7 +48,7 @@ export default function MyBookings() {
 
   useEffect(() => {
     setBookings(getBookings());
-  }, [window.location.pathname]);
+  },[]);
 
   return (
     <section className="py-6">
