@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { saveBooking } from "../utils/storage";
-import { useNavigate } from "react-router-dom"; // <-- import useNavigate
+import { useNavigate } from "react-router-dom"; 
 
 export default function BookingModal({ center, onClose, onBooking }) {
-  const navigate = useNavigate(); // <-- initialize navigate
+  const navigate = useNavigate(); 
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().slice(0, 10)
@@ -41,7 +41,7 @@ export default function BookingModal({ center, onClose, onBooking }) {
       address: center.address,
       city: center.city,
       state: center.state,
-      date: new Date(selectedDate).toDateString(), // human-readable
+      date: new Date(selectedDate).toDateString(), 
       time: selectedSlot,
       note,
     };
@@ -49,8 +49,8 @@ export default function BookingModal({ center, onClose, onBooking }) {
     try {
       saveBooking(booking);
       setMessage("Booking confirmed!");
-      if (onBooking) onBooking(booking); // notify parent if needed
-      onClose(); // close modal
+      if (onBooking) onBooking(booking); 
+      onClose(); 
       navigate("/my-bookings"); 
     } catch (e) {
       setMessage("Error: Could not save booking. Storage limit reached?");
