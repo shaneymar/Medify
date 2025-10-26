@@ -15,7 +15,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/search" element={<SearchResults />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
+          <Route path="https://medify-eosin-ten.vercel.app/my-bookings" element={<MyBookings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
