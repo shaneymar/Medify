@@ -376,7 +376,7 @@ export default function BookingModal({ center, onClose, onBooking }) {
       setMessage("Booking confirmed!");
       if (onBooking) onBooking(booking); // notify parent if needed
       onClose(); // close modal
-      navigate("/my-bookings"); // <-- redirect to MyBookings page
+      navigate("/my-bookings"); 
     } catch (e) {
       setMessage("Error: Could not save booking. Storage limit reached?");
       console.error("Booking save error:", e);
