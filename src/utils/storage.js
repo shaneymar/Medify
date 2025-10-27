@@ -1,6 +1,6 @@
 
-
-const STORAGE_KEY = "medify_bookings";
+//  Use the key 
+const STORAGE_KEY = "bookings";
 
 export const saveBooking = (booking) => {
   const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -9,4 +9,4 @@ export const saveBooking = (booking) => {
 
 export const getBookings = () => {
   return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-};
+}
