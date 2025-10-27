@@ -1,15 +1,19 @@
-
-
 import React, { useEffect, useState } from "react";
 import { getBookings } from "../utils/storage";
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
-
   useEffect(() => {
-    setBookings(getBookings());
-  }, []); 
+    const loadBookings = () => {
+      setBookings(getBookings());
+    };
+
+    loadBookings(); // Load on mount
+    window.addEventListener("storage", loadBookings); // Load on reload / updates
+
+    return () => window.removeEventListener("storage", loadBookings);
+  }, []);
 
   return (
     <section className="py-6">
@@ -27,9 +31,7 @@ export default function MyBookings() {
             >
               <h3 className="font-semibold">{b.hospitalName || b.centerName}</h3>
               <p>{b.address}</p>
-              <p>
-                {b.city}, {b.state}
-              </p>
+              <p>{b.city}, {b.state}</p>
               <p>Date: {b.date}</p>
               <p>Time: {b.time}</p>
               {b.note && <p>Note: {b.note}</p>}
