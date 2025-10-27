@@ -37,7 +37,8 @@ export default function BookingModal({ center, onClose, onBooking }) {
 
     const booking = {
       id: Date.now() + "-" + Math.random().toString(36).slice(2, 7),
-      centerName: center.name,
+      // centerName: center.name,
+      hospitalName: center.name,
       address: center.address,
       city: center.city,
       state: center.state,
