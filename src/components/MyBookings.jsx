@@ -25,7 +25,7 @@ export default function MyBookings() {
               data-testid={`booking-item-${b.id}`}
               className="bg-white p-4 rounded shadow"
             >
-              <h3 className="font-semibold">{b.centerName}</h3>
+              <h3 className="font-semibold">{b.hospitalName || b.centerName}</h3>
               <p>{b.address}</p>
               <p>
                 {b.city}, {b.state}
