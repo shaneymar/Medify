@@ -13,7 +13,7 @@ export default function MyBookings() {
 
   return (
     <section className="py-6">
-      <h1 className="text-2xl font-semibold mb-4">My Bookings</h1>
+      <h3 className="text-2xl font-semibold mb-4">My Bookings</h3>
 
       {bookings.length === 0 ? (
         <p data-testid="no-bookings-message">No bookings yet.</p>
